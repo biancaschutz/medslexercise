@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Maria Bianca Schutz">
+
+<title>MEDSL Exercise</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="medsl_work_files/libs/clipboard/clipboard.min.js"></script>
+<script src="medsl_work_files/libs/quarto-html/quarto.js"></script>
+<script src="medsl_work_files/libs/quarto-html/popper.min.js"></script>
+<script src="medsl_work_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="medsl_work_files/libs/quarto-html/anchor.min.js"></script>
+<link href="medsl_work_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="medsl_work_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="medsl_work_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="medsl_work_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="medsl_work_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#part-1-wrangling" id="toc-part-1-wrangling" class="nav-link active" data-scroll-target="#part-1-wrangling">Part 1: Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#clean-the-dataset" id="toc-clean-the-dataset" class="nav-link" data-scroll-target="#clean-the-dataset">1. Clean the dataset</a></li>
+  <li><a href="#issues-with-the-data" id="toc-issues-with-the-data" class="nav-link" data-scroll-target="#issues-with-the-data">2. Issues with the data</a></li>
+  <li><a href="#distribution" id="toc-distribution" class="nav-link" data-scroll-target="#distribution">3. Distribution</a></li>
+  <li><a href="#wide-or-long" id="toc-wide-or-long" class="nav-link" data-scroll-target="#wide-or-long">4. Wide or long?</a></li>
+  </ul></li>
+  <li><a href="#part-2-thinking" id="toc-part-2-thinking" class="nav-link" data-scroll-target="#part-2-thinking">Part 2: Thinking</a>
+  <ul class="collapse">
+  <li><a href="#what-variables-would-you-extract-for-each-ballot-measure-in-order-to-study-the-information-voters-are-exposed-to-about-ballot-measures-what-might-you-be-able-to-measure-using-them" id="toc-what-variables-would-you-extract-for-each-ballot-measure-in-order-to-study-the-information-voters-are-exposed-to-about-ballot-measures-what-might-you-be-able-to-measure-using-them" class="nav-link" data-scroll-target="#what-variables-would-you-extract-for-each-ballot-measure-in-order-to-study-the-information-voters-are-exposed-to-about-ballot-measures-what-might-you-be-able-to-measure-using-them">What variables would you extract for each ballot measure in order to study the information voters are exposed to about ballot measures? What might you be able to measure using them?</a></li>
+  <li><a href="#how-would-you-structure-the-dataset-you-create-from-the-voter-guide-and-why" id="toc-how-would-you-structure-the-dataset-you-create-from-the-voter-guide-and-why" class="nav-link" data-scroll-target="#how-would-you-structure-the-dataset-you-create-from-the-voter-guide-and-why">How would you structure the dataset you create from the voter guide and why?</a></li>
+  </ul></li>
+  <li><a href="#part-3-reviewing" id="toc-part-3-reviewing" class="nav-link" data-scroll-target="#part-3-reviewing">Part 3: Reviewing</a>
+  <ul class="collapse">
+  <li><a href="#what-does-the-script-do-you-dont-need-to-understand-what-every-variable-is-or-explain-every-single-line-but-should-explain-what-each-chunk-of-code-seems-to-do." id="toc-what-does-the-script-do-you-dont-need-to-understand-what-every-variable-is-or-explain-every-single-line-but-should-explain-what-each-chunk-of-code-seems-to-do." class="nav-link" data-scroll-target="#what-does-the-script-do-you-dont-need-to-understand-what-every-variable-is-or-explain-every-single-line-but-should-explain-what-each-chunk-of-code-seems-to-do.">What does the script do? You don’t need to understand what every variable is or explain every single line but should explain what each chunk of code seems to do.</a></li>
+  <li><a href="#are-there-any-ways-to-improve-the-code" id="toc-are-there-any-ways-to-improve-the-code" class="nav-link" data-scroll-target="#are-there-any-ways-to-improve-the-code">Are there any ways to improve the code?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">MEDSL Exercise</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Maria Bianca Schutz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="part-1-wrangling" class="level1">
+<h1>Part 1: Wrangling</h1>
+<section id="clean-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="clean-the-dataset">1. Clean the dataset</h2>
+<p>First, load in the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.4.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   4.0.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>indiana_raw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"part1_data.csv"</span>) </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(indiana_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Election JurisdictionName ReportingCountyName
+1 2024 General Election        Statewide      Prairie County
+2 2024 General Election        Statewide      Prairie County
+3 2024 General Election        Statewide      Prairie County
+4 2024 General Election        Statewide      Prairie County
+5 2024 General Election        Statewide      Prairie County
+6 2024 General Election        Statewide      Prairie County
+  DataEntryJurisdictionName DataEntryLevelName                        Office
+1              Clearwater-A           Precinct US President &amp; Vice President
+2              Clearwater-A           Precinct US President &amp; Vice President
+3              Clearwater-A           Precinct US President &amp; Vice President
+4              Clearwater-A           Precinct US President &amp; Vice President
+5              Clearwater-A           Precinct US President &amp; Vice President
+6              Clearwater-A           Precinct US President &amp; Vice President
+                               OfficeCategory BallotOrder
+1 Presidential Electors For US President &amp; Vp          20
+2 Presidential Electors For US President &amp; Vp          20
+3 Presidential Electors For US President &amp; Vp          20
+4 Presidential Electors For US President &amp; Vp          20
+5 Presidential Electors For US President &amp; Vp          20
+6 Presidential Electors For US President &amp; Vp          20
+                                NameonBallot                     PoliticalParty
+1               André Ramon Mcneil Sr. (W/I)                        Independent
+2                          Carol Asher (W/I)                        Independent
+3              Chase Oliver &amp; Mike  Ter Maat                        Libertarian
+4                    Cherunda Lynn Fox (W/I)                        Independent
+5 Claudia De La Cruz &amp; Karina  Garcia  (W/I) Party For Socialism And Liberation
+6      Cornel West &amp; Melina  Abdullah  (W/I)                        Independent
+  Winner NumberofOfficeSeats TotalVotes
+1     No                   1          0
+2     No                   1          0
+3     No                   1          4
+4     No                   1          0
+5     No                   1          0
+6     No                   1          0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(indiana_raw<span class="sc">$</span>DataEntryLevelName) <span class="co"># we have 1 entry that is incorrect, deal with that first</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+                     Locality Prairie County       Precinct 
+             1            272              1           7863 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#indiana_raw %&gt;% </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(DataEntryLevelName == "Prairie County") </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># looks like fields were shifted</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>rows <span class="ot">&lt;-</span> indiana_raw[<span class="fu">c</span>(<span class="dv">322</span>, <span class="dv">323</span>), ] <span class="co"># these rows got shifted</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>correct_row <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">c</span>(rows[<span class="dv">1</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>, <span class="at">drop =</span> <span class="cn">TRUE</span>], </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                        rows[<span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">drop =</span> <span class="cn">TRUE</span>]))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>indiana_raw[<span class="dv">322</span>,] <span class="ot">&lt;-</span> correct_row <span class="co"># fixed row</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>indiana_fixed_322 <span class="ot">&lt;-</span> indiana_raw[<span class="sc">-</span><span class="dv">323</span>,] <span class="co"># row with empty values removed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To create the precinct column, I drop the “locality” rows under the assumption that localities are not precincts and keep only the observations that are precinct entries. I then copy over the data from <code>DataEntryJurisdictionName</code> to create the cleaned precinct column, and per the instructions, leave the names exactly as they are as there is no shapefile to suggest otherwise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dropping the locality-type data to isolate precincts only</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>indiana_precinctsonly <span class="ot">&lt;-</span> indiana_fixed_322 <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(DataEntryLevelName <span class="sc">==</span> <span class="st">"Precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># creating a new column called precinct for cleaned dataset</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">precinct =</span> DataEntryJurisdictionName) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>DataEntryJurisdictionName, <span class="sc">-</span>DataEntryLevelName)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To create the office column, I use string detection for the values listed in the codebook.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table(indiana_precinctsonly$Office)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>indiana_office <span class="ot">&lt;-</span> indiana_precinctsonly <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">office =</span> <span class="fu">str_extract</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make the original column upper-case</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_to_upper</span>(Office), </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># this particular dataset only has presidential data, so extract that pattern</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"US PRESIDENT"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Office)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, create the party columns, <code>party_detailed</code> and <code>party_simplified</code>. There are no parties listed as nonpartisan because the presidential election is partisan:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table(indiana_office$PoliticalParty)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we do not seem to have any of the special cases noted in codebook</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>indiana_parties <span class="ot">&lt;-</span> indiana_office <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># first, party detailed: simply make it upper case</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">party_detailed =</span> <span class="fu">ifelse</span>(<span class="fu">str_to_upper</span>(PoliticalParty) <span class="sc">==</span> <span class="st">"DEMOCRATIC"</span>, <span class="st">"DEMOCRAT"</span>, <span class="fu">str_to_upper</span>(PoliticalParty)),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># give simplified values based on detailed party, making independents and local/smaller parties "other"</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">party_simplified =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>      party_detailed <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"DEMOCRAT"</span>, <span class="st">"REPUBLICAN"</span>, <span class="st">"LIBERTARIAN"</span>, <span class="st">"OTHER"</span>) <span class="sc">~</span> party_detailed,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default =</span> <span class="st">"OTHER"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>PoliticalParty)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># table(indiana_parties$party_detailed)</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># table(indiana_parties$party_simplified)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, dealing with the number of votes. There was one row with a negative value, -8, which is invalid. Rather than count those votes not knowing if this was an error, I elected to mark it as an error and set it to 0. After making the column numeric, I identified a precinct that had 999999 votes, a value that is sometimes used for redacting data, but since it is a valid number, I elected to leave it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sum(is.na(indiana_parties$TotalVotes)) # no missing values</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sum(str_detect(indiana_parties$TotalVotes, "\\D")) # one row with non-numeric</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># indiana_parties %&gt;% filter(str_detect(indiana_parties$TotalVotes, "\\D")) </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>indiana_votes <span class="ot">&lt;-</span> indiana_parties <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">votes =</span> <span class="fu">ifelse</span>(TotalVotes <span class="sc">==</span> <span class="st">"-8"</span>, <span class="dv">0</span>, <span class="fu">as.numeric</span>(TotalVotes)),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">votes =</span> <span class="fu">ifelse</span>(votes <span class="sc">==</span> <span class="dv">999999</span>, <span class="dv">0</span>, votes)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>TotalVotes)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(indiana_votes$votes)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we work with the county information:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fips <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"part1_fips.csv"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># all counties in our dataset are in the fips file</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># length(unique(indiana_votes$ReportingCountyName))</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># length(unique(indiana_votes$ReportingCountyName)[unique(indiana_votes$ReportingCountyName) %in% unique(fips$county_name)])</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># using right_join so it takes the name of the fips county column</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>indiana_counties <span class="ot">&lt;-</span> fips <span class="sc">%&gt;%</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(indiana_votes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"county_name"</span> <span class="ot">=</span> <span class="st">"ReportingCountyName"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county_name =</span> <span class="fu">str_to_upper</span>(county_name))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># sum(is.na(indiana_counties$county_fips)) # merged successfully</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Jurisdiction name will be the same as county name:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>indiana_juris <span class="ot">&lt;-</span> indiana_counties <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">jurisdiction_name =</span> county_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Indiana lists the specific write-in candidate names, so we need to extract those names and fix the John Smith entry with symbols</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table(indiana_juris$NameonBallot)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>indiana_candidates <span class="ot">&lt;-</span> indiana_juris <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">no_vp_or_wi =</span> <span class="fu">ifelse</span>(NameonBallot <span class="sc">==</span> <span class="st">"Jøhn$§ Smît#h (W/I)"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"JOHN SMITH"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">trimws</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">str_remove_all</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_extract</span>(NameonBallot, </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"^[^&amp;]*"</span>), </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"</span><span class="sc">\\</span><span class="st">(W/I</span><span class="sc">\\</span><span class="st">)"</span>))))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#table(indiana_candidates$no_vp_or_wi)</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>indiana_candidates2 <span class="ot">&lt;-</span> indiana_candidates <span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">candidate =</span> <span class="fu">ifelse</span>(no_vp_or_wi <span class="sc">==</span> <span class="st">"Robert F. Kennedy Jr."</span>, <span class="st">"ROBERT F KENNEDY"</span>, </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">str_to_upper</span>(</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">str_replace_all</span>(</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">str_remove_all</span>(no_vp_or_wi, </span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"[^A-Za-zé ]"</span>),</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="st">" "</span>)))) <span class="sc">%&gt;%</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>no_vp_or_wi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now get election year, stage, state, and whether it’s special:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>indiana_election <span class="ot">&lt;-</span> indiana_candidates2 <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(<span class="fu">str_extract</span>(Election, <span class="st">"</span><span class="sc">\\</span><span class="st">d{4}"</span>)),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">stage =</span> <span class="fu">case_when</span>(<span class="fu">str_detect</span>(Election, <span class="st">"General"</span>) <span class="sc">~</span> <span class="st">"GEN"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_detect</span>(Election, <span class="st">"Primary"</span>) <span class="sc">~</span> <span class="st">"PRI"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_detect</span>(Election, <span class="st">"Runoff"</span>) <span class="sc">~</span> <span class="st">"RUNOFF"</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">state =</span> <span class="st">"INDIANA"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">special =</span> <span class="fu">ifelse</span>(<span class="fu">str_detect</span>(Election, <span class="st">"Special"</span>), <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Election)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Whether they were a write-in, denoted by (W/I):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>indiana_writein <span class="ot">&lt;-</span> indiana_election <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">writein =</span> <span class="fu">ifelse</span>(<span class="fu">str_detect</span>(NameonBallot, <span class="st">"</span><span class="sc">\\</span><span class="st">(W/I</span><span class="sc">\\</span><span class="st">)"</span>), <span class="cn">TRUE</span>, <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These are all from the 2024 general election, so for all observations the date is November 5, 2024, formatted as %y-%m-%d:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>indiana <span class="ot">&lt;-</span> indiana_writein <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="st">"2024-11-05"</span>, <span class="st">"%Y-%m-%d"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, drop all raw columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>indiana_clean <span class="ot">&lt;-</span> indiana <span class="sc">%&gt;%</span> <span class="fu">select</span>(precinct, office, party_detailed, party_simplified, votes, county_name, county_fips, jurisdiction_name, candidate, year, stage, state, special, writein, date)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(indiana_clean, <span class="st">"part1_clean.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="issues-with-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="issues-with-the-data">2. Issues with the data</h2>
+<p>In the vote column, I identified two observations that were either invalid or were unusual, one precinct that marked -8 votes for a candidate, and a precinct that had 999999 votes for a candidate. I noted these issues using string detection for non-numeric characters and using the summary function to find unusual numbers. For the negative value, I chose to mark it as zero, not knowing if it was a typo or if that was how the state marked redacted or other data, rather than assume it was an error. The 999999 I chose to remove as well, since sometimes that value is used to denote missing data. To ensure these values are coded correctly outside of this assessment, I would go about fixing these two errors by reading a codebook from the state first to see how they identify redacted data, and then reach out to them directly if the documentation didn’t clarify those aspects to check if those values are correct.</p>
+<p>Another issue I identified was an unusual candidate name, “Jøhn$§ Smît#h (W/I)”, which I found by using the table() function on the NameonBallot column. I reasonably assumed this was meant to be John Smith and adjusted it as such, as sometimes moving data from one source to another can result in the addition of extraneous symbols.</p>
+</section>
+<section id="distribution" class="level2">
+<h2 class="anchored" data-anchor-id="distribution">3. Distribution</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(indiana_clean, <span class="fu">aes</span>(<span class="at">x =</span> votes)) <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">50</span>, <span class="at">center =</span> <span class="dv">25</span>) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">"Votes for a candidate"</span>, <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Number of Precincts"</span>, <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">8000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="medsl_work_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(indiana_clean <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(candidate) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">votes =</span> <span class="fu">sum</span>(votes)), <span class="fu">aes</span>(<span class="at">x =</span> votes, <span class="at">y =</span> <span class="fu">fct_reorder</span>(candidate, votes))) <span class="sc">+</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Votes"</span>, <span class="at">y =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="medsl_work_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="wide-or-long" class="level2">
+<h2 class="anchored" data-anchor-id="wide-or-long">4. Wide or long?</h2>
+<p>Both the clean and raw datasets are in a long format, as each precinct has multiple rows, one for each candidate and a single numeric value in that row for that specific group. If it was wide, each precinct might, for example, have 1 row with a column name for each of the candidates.</p>
+</section>
+</section>
+<section id="part-2-thinking" class="level1">
+<h1>Part 2: Thinking</h1>
+<section id="what-variables-would-you-extract-for-each-ballot-measure-in-order-to-study-the-information-voters-are-exposed-to-about-ballot-measures-what-might-you-be-able-to-measure-using-them" class="level2">
+<h2 class="anchored" data-anchor-id="what-variables-would-you-extract-for-each-ballot-measure-in-order-to-study-the-information-voters-are-exposed-to-about-ballot-measures-what-might-you-be-able-to-measure-using-them">What variables would you extract for each ballot measure in order to study the information voters are exposed to about ballot measures? What might you be able to measure using them?</h2>
+<p>I would extract information about the people whose views are for or against each measure, as well as information about each measure such as a general description or “category” of what type of issue it is. You could also study the language used by those who are for or against the measure to see what types of arguments are included in the guide, such as emotional or charged language that might convince voters more than reading the ballot details. Voters might also see who from their community is opposing or supporting the measures, which could influence decisions based on in-group and out-group feelings, such as more progressive voters voting in line with the ACLU’s views. If the ballot measure has a section on fiscal impact, I would also include that as a variable.</p>
+</section>
+<section id="how-would-you-structure-the-dataset-you-create-from-the-voter-guide-and-why" class="level2">
+<h2 class="anchored" data-anchor-id="how-would-you-structure-the-dataset-you-create-from-the-voter-guide-and-why">How would you structure the dataset you create from the voter guide and why?</h2>
+<p>I would structure the dataset with each row representing a person’s views on the ballot measures. For example, one row would be Cyndi Tuell, and then I would have columns for each ballot measure and how that person voted, either “Y” or “N”, and a column for an explanation as to why. I would also include a column for occupation or other demographics to analyze patterns in who supports or opposes each measure.</p>
+</section>
+</section>
+<section id="part-3-reviewing" class="level1">
+<h1>Part 3: Reviewing</h1>
+<section id="what-does-the-script-do-you-dont-need-to-understand-what-every-variable-is-or-explain-every-single-line-but-should-explain-what-each-chunk-of-code-seems-to-do." class="level2">
+<h2 class="anchored" data-anchor-id="what-does-the-script-do-you-dont-need-to-understand-what-every-variable-is-or-explain-every-single-line-but-should-explain-what-each-chunk-of-code-seems-to-do.">What does the script do? You don’t need to understand what every variable is or explain every single line but should explain what each chunk of code seems to do.</h2>
+<p>The script performs specific changes to the data. The first chunk removes a specific county from the dataset, and the second chunk sets values for the county with fips code 23 to 0, such as the number of those who are registered and eligible. The third chunk also adjusts the values of those who are registered and eligible for various fips codes. The fourth chunk sets values to 0 for fips code 23 if it’s in Maine. The sixth and seventh chunks also set values to 0 for fips code 23, but not specifically in Maine.</p>
+</section>
+<section id="are-there-any-ways-to-improve-the-code" class="level2">
+<h2 class="anchored" data-anchor-id="are-there-any-ways-to-improve-the-code">Are there any ways to improve the code?</h2>
+<p>In general, the code is very manual and performs the same process over and over again. If it was possible to streamline the replacement of <code>registeredAndEligible</code> values with one line of code or a type of join, that would be cleaner and more efficient. Additionally, the code seems to set all fields for FIPS code 23 to 0, which could easily be done more efficiently in the same way. Finally, it would be helpful to have some sort of documentation explaining the changes that are being made.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
